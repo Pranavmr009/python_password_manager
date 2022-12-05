@@ -20,7 +20,7 @@ Installation
     python main.py -g -s passwordforamazon
     
     
-    Example to retrieve a password from the password database
+5. Example to retrieve a password from the password database
     
     
     python main.py -r -s passwordforamazon
