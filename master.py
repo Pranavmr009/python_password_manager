@@ -15,7 +15,7 @@ def decrypt_master():
     key = get_key()
 
     fernet = Fernet(key)
-    encMessage = "gAAAAABjkb6J8RPryf_hPuJlNyqaogUD9Zxn7P5waEjig-pFS-3DV11nwu181hi97AbU-0tZYc3b_pPp-4P8Ra5syYkEtP87_A=="
+    encMessage = "key"
 
     decMessage = fernet.decrypt(encMessage).decode()
 
