@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+import os
 import sys
 import pyperclip
 from cryptography.fernet import Fernet
@@ -5,16 +7,17 @@ import db
 import generator
 import argparse
 from os.path import exists
+import master
 
 
 def generate_key():
     key = Fernet.generate_key()
-    with open(".key.txt", "ab") as f:
+    with open("/media/pranav/HDD-1/python projects/password_manager/.key.txt", "ab") as f:
         f.write(key)
 
 
 def get_key():
-    with open(".key.txt", "rb") as f:
+    with open("/media/pranav/HDD-1/python projects/password_manager/.key.txt", "rb") as f:
         key = f.read()
 
     return key
@@ -54,18 +57,34 @@ if __name__ == '__main__':
     parser.add_argument('-r', help='retrieve the password from the database', action="store_false")
     args, remaining = parser.parse_known_args()
 
-    if not exists('.key.txt'):
+    if os.path.exists('.key.txt'):
+        pass
+    else:
         generate_key()
 
     if '-g' in sys.argv:
         if '-s' in sys.argv:
-            # print(args.g)
-            encrypt(args.s)
+            if master.decrypt_master():
+                encrypt(args.s)
+            else:
+                sys.exit("Wrong password!!!")
         else:
             sys.exit('Error provide the -s (service) argument ')
 
     elif '-r' in sys.argv:
         if '-s' in sys.argv:
-            decrypt(args.s)
+            if master.decrypt_master():
+                decrypt(args.s)
+            else:
+                sys.exit("Wrong password!!!")
+
         else:
             sys.exit('Error provide the -s (service) argument ')
+
+    elif '-a' in sys.argv:
+        if master.decrypt_master():
+            print("\n****************************************************************************\n")
+            db.retrieve_all()
+            print("\n****************************************************************************\n")
+        else:
+            sys.exit("Wrong password!!!")
